@@ -7,10 +7,12 @@ public class CatalogController : Controller
     public CatalogController(ICatalogService catalogSvc) =>
         _catalogSvc = catalogSvc;
 
-    public async Task<IActionResult> Index(int? BrandFilterApplied, int? TypesFilterApplied, int? page, [FromQuery] string errorMsg)
+    public async Task<IActionResult> Index(int? BrandFilterApplied, int? TypesFilterApplied, string SearchFilterApplied, int? page, [FromQuery] string errorMsg)
     {
         var itemsPage = 9;
-        var catalog = await _catalogSvc.GetCatalogItems(page ?? 0, itemsPage, BrandFilterApplied, TypesFilterApplied);
+        //var catalog = await _catalogSvc.GetCatalogItems(page ?? 0, itemsPage, BrandFilterApplied, TypesFilterApplied);
+
+        var catalog = await _catalogSvc.GetCatalogItemsBySearch(page ?? 0, itemsPage, SearchFilterApplied);
         var vm = new IndexViewModel()
         {
             CatalogItems = catalog.Data,
@@ -18,6 +20,7 @@ public class CatalogController : Controller
             Types = await _catalogSvc.GetTypes(),
             BrandFilterApplied = BrandFilterApplied ?? 0,
             TypesFilterApplied = TypesFilterApplied ?? 0,
+            SearchFilterApplied = SearchFilterApplied ?? "",
             PaginationInfo = new PaginationInfo()
             {
                 ActualPage = page ?? 0,
