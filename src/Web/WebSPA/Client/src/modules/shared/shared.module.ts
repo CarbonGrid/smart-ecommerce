@@ -22,6 +22,8 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 
 // Pipes:
 import { UppercasePipe } from './pipes/uppercase.pipe';
+import { FooterComponent } from 'modules/shared/components/footer/footer.component';
+import { ImageCarouselComponent } from 'modules/image-carousel/image-carousel.component';
 
 @NgModule({
     imports: [
@@ -37,6 +39,8 @@ import { UppercasePipe } from './pipes/uppercase.pipe';
     declarations: [
         Pager,
         Header,
+        FooterComponent,
+        ImageCarouselComponent,
         Identity,
         PageNotFoundComponent,
         UppercasePipe
@@ -51,6 +55,8 @@ import { UppercasePipe } from './pipes/uppercase.pipe';
         // Providers, Components, directive, pipes
         Pager,
         Header,
+        FooterComponent,
+        ImageCarouselComponent,
         Identity,
         PageNotFoundComponent,
         UppercasePipe
