@@ -81,5 +81,18 @@ public static class API
         {
             return $"{baseUri}catalogTypes";
         }
+
+        public static string GetAllCatalogItemsBySearch(string baseUri, int page, int take, string searchText)
+        {
+            if (searchText == null)
+            {
+                searchText = string.Empty;
+            }
+            else
+            {
+                searchText = $"/search/{searchText}?pageIndex={page}&pageSize={take}";
+            }
+            return $"{baseUri}items{searchText}";
+        }
     }
 }

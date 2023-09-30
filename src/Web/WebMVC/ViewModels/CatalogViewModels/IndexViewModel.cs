@@ -7,5 +7,6 @@ public class IndexViewModel
     public IEnumerable<SelectListItem> Types { get; set; }
     public int? BrandFilterApplied { get; set; }
     public int? TypesFilterApplied { get; set; }
+    public string SearchFilterApplied { get; set; }
     public PaginationInfo PaginationInfo { get; set; }
 }

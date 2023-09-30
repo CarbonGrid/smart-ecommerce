@@ -145,6 +145,48 @@ public class CatalogController : ControllerBase
         return new PaginatedItemsViewModel<CatalogItem>(pageIndex, pageSize, totalItems, itemsOnPage);
     }
 
+    // GET api/v1/[controller]/items/search/searchText[?pageSize=3&pageIndex=10]
+    [HttpGet]
+    [Route("items/search/{searchText}")]
+    public async Task<ActionResult<PaginatedItemsViewModel<CatalogItem>>> ItemsBySearchTextAsync(string searchText, [FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
+    {
+        
+        var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
+        var fetchItems = root
+            .ToListAsync();
+
+        Dictionary<(char, char), int> bigrams = new Dictionary<(char, char), int>();
+        var searchString = (' ' + searchText.ToLowerInvariant() + ' ');
+        for (var i = searchString.Length - 2; i >= 0; i--)
+        {
+            if (!bigrams.TryAdd((searchString[i], searchString[i + 1]), 1))
+            {
+                bigrams[(searchString[i], searchString[i + 1])]++;
+            }
+        }
+
+        var itemsOnPage = (await fetchItems)
+            .Where(ci => {
+                var searchString = ' ' + ci.Name.ToLowerInvariant() + ' ' + ci.Description.ToLowerInvariant() + ' ';
+                for (var i = searchString.Length - 2; i >= 0; i--)
+                {
+                    if (bigrams.TryGetValue((searchString[i], searchString[i + 1]), out var x))
+                    {
+                        ci.Score += x;
+                    }
+                }
+                return ci.Score > 0;
+            })
+            .OrderByDescending(ci => ci.Score)
+            .Skip(pageSize * pageIndex)
+            .Take(pageSize)
+            .ToList();
+
+        itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
+
+        return new PaginatedItemsViewModel<CatalogItem>(pageIndex, pageSize, itemsOnPage.LongCount(), itemsOnPage);
+    }
+
     // GET api/v1/[controller]/items/type/all/brand[?pageSize=3&pageIndex=10]
     [HttpGet]
     [Route("items/type/all/brand/{catalogBrandId:int?}")]

@@ -74,4 +74,21 @@ public class CatalogService : ICatalogService
 
         return items;
     }
+
+    public async Task<Catalog> GetCatalogItemsBySearch(int page, int take, string searchText)
+    {
+        
+        var uri = API.Catalog.GetAllCatalogItemsBySearch(_remoteServiceBaseUrl, page, take, searchText);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var catalog = JsonSerializer.Deserialize<Catalog>(responseString, JsonDefaults.CaseInsensitiveOptions);
+
+        return catalog;
+    }
+
+    public async Task UpdateSearchHistory(string searchText)
+    {
+
+    }
 }

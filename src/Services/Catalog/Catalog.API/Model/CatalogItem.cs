@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Model;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.Model;
 
 public class CatalogItem
 {
@@ -7,6 +9,9 @@ public class CatalogItem
     public string Name { get; set; }
 
     public string Description { get; set; }
+
+    [NotMapped]
+    public int Score { get; set; }
 
     public decimal Price { get; set; }
 
