@@ -7,6 +7,7 @@ public class CatalogController : ControllerBase
     private readonly CatalogContext _catalogContext;
     private readonly CatalogSettings _settings;
     private readonly ICatalogIntegrationEventService _catalogIntegrationEventService;
+    private Regex multispaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
 
     public CatalogController(CatalogContext context, IOptionsSnapshot<CatalogSettings> settings, ICatalogIntegrationEventService catalogIntegrationEventService)
     {
@@ -148,16 +149,16 @@ public class CatalogController : ControllerBase
     // GET api/v1/[controller]/items/search/searchText[?pageSize=3&pageIndex=10]
     [HttpGet]
     [Route("items/search/{searchText}")]
-    public async Task<ActionResult<PaginatedItemsViewModel<CatalogItem>>> ItemsBySearchTextAsync(string searchText, [FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
+    public async Task<ActionResult<PaginatedItemsViewModel<CatalogItem>>> ItemsBySearchTextAsync(string searchText = "", [FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
     {
         
         var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
         var fetchItems = root
-            .Select(item => new CatalogItem(){ Id = item.Id, Name = ' ' + item.Name.ToLowerInvariant() + ' ' + item.Description.ToLowerInvariant() + ' ' })
+            .Select(item => new CatalogItem(){ Id = item.Id, Name = ' ' + item.Name.ToLowerInvariant() })
             .ToListAsync();
 
         Dictionary<(char, char), int> bigrams = new Dictionary<(char, char), int>();
-        var searchString = (' ' + searchText.ToLowerInvariant() + ' ');
+        var searchString = (' ' + searchText.ToLowerInvariant().Trim());
         for (var i = searchString.Length - 2; i >= 0; i--)
         {
             if (!bigrams.TryAdd((searchString[i], searchString[i + 1]), 1))
@@ -168,15 +169,25 @@ public class CatalogController : ControllerBase
 
         var itemsOnPage = (await fetchItems)
             .Where(ci => {
+                ci.Name = multispaceRegex.Replace(ci.Name, " ");
                 var searchString = ci.Name;
+                var wordScore = 1;
                 for (var i = searchString.Length - 2; i >= 0; i--)
                 {
+                    if (searchString[i] == ' ')
+                    {
+                        ci.Score += wordScore;
+                        wordScore = 1;
+                        i--;
+                        continue;
+                    }
                     if (bigrams.TryGetValue((searchString[i], searchString[i + 1]), out var x))
                     {
-                        ci.Score += x;
+                        wordScore *= (1 + x);
                     }
+                    
                 }
-                return ci.Score > 0;
+                return ci.Score > ci.Name.Count(c => c == ' ');
             })
             .OrderByDescending(ci => ci.Score)
             .Skip(pageSize * pageIndex)

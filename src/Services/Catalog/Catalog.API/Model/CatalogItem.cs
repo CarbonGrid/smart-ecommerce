@@ -11,7 +11,7 @@ public class CatalogItem
     public string Description { get; set; }
 
     [NotMapped]
-    public int Score { get; set; }
+    public long Score { get; set; }
 
     public decimal Price { get; set; }
 
