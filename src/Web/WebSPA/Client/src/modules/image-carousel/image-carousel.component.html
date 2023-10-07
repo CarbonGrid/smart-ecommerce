@@ -1,22 +1,20 @@
-<div class="carousel-container"
-    [style.height.%]="config.height"
-    [style.width.%]="config.width">
-
-    <a class="carousel-btn previous">
-        <i class="material-icons">chevron_left</i>
-    </a>
-    <a class="carousel-btn next">
-        <i class="material-icons">chevron_right</i>
-    </a>
-
-    <div *ngFor="let image of images; let i = index;" class="carousel-wrapper">
-        <ng-container *ngIf="i == activeImageIndex">
-            <img 
-            [src]="image.src"
-            [alt]="image.alt"
-            [style.height.%]="config.height"
-            [style.width.%]="config.width"/>            
-        </ng-container>
+<div class="slider">
+    <div>
+        <div>
+            <div (click)="goToPrevious()" class="leftArrow">❰</div>
+            <div (click)="goToNext()" class="rightArrow">❱</div>
+        </div>
     </div>
-
-</div>
+    <div
+      class="slide"
+      [ngStyle]="{ 'background-image': getCurrentSlideUrl() }">
+      <div class="dotsContainer">
+        <div
+          *ngFor="let slide of images; let slideIndex = index"
+          class="dot"
+          (click)="goToSlide(slideIndex)"
+        >
+          ●
+        </div>
+    </div>
+  </div>

@@ -11,10 +11,12 @@ import { CatalogModule } from './catalog/catalog.module';
 import { OrdersModule } from './orders/orders.module';
 import { BasketModule } from './basket/basket.module';
 import { ToastrModule } from 'ngx-toastr';
-import { FooterComponent } from './shared/components/footer/footer.component';
+import { FilterPipe } from './shared/pipes/FilterPipe';
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [
+        AppComponent,
+        FilterPipe],
     imports: [
         BrowserAnimationsModule,
         BrowserModule,
