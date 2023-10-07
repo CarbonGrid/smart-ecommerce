@@ -154,7 +154,7 @@ public class CatalogController : ControllerBase
         
         var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
         var fetchItems = root
-            .Select(item => new CatalogItem(){ Id = item.Id, Name = ' ' + item.Name.ToLowerInvariant() + ' ' + item.Description.ToLowerInvariant()})
+            .Select(item => new CatalogItem(){ Id = item.Id, Name = ' ' + item.Name.ToLowerInvariant() })
             .ToListAsync();
 
         Dictionary<(char, char), int> bigrams = new Dictionary<(char, char), int>();
