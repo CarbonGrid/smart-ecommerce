@@ -8,18 +8,21 @@ import { ICatalogType } from '../shared/models/catalogType.model';
 
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { ICatalogItem } from 'modules/shared/models/catalogItem.model';
 
 @Injectable()
 export class CatalogService {
     private catalogUrl: string = '';
     private brandUrl: string = '';
     private typesUrl: string = '';
+    private productUrl: string = '';
   
     constructor(private service: DataService, private configurationService: ConfigurationService) {
         this.configurationService.settingsLoaded$.subscribe(x => {
             this.catalogUrl = this.configurationService.serverSettings.purchaseUrl + '/c/api/v1/catalog/items';
             this.brandUrl = this.configurationService.serverSettings.purchaseUrl + '/c/api/v1/catalog/catalogbrands';
             this.typesUrl = this.configurationService.serverSettings.purchaseUrl + '/c/api/v1/catalog/catalogtypes';
+            this.productUrl = this.configurationService.serverSettings.purchaseUrl + '/api/v1/Catalog/items';
         });
     }
 
@@ -40,6 +43,22 @@ export class CatalogService {
         }));
     }
 
+    getRecommendItems(id: number): Observable<string []>{
+        let url = " http://127.0.0.1:5000";
+        if (id == null){
+            url = url +"/recommend/null";
+        }
+        else{
+            url = url+"/recommend/"+id;
+        }
+
+        return this.service.getRecommendedItems(url).pipe<string []>(tap((response:string[]) =>{
+            return response;
+        }))
+    }
+
+   
+
     getBrands(): Observable<ICatalogBrand[]> {
         return this.service.get(this.brandUrl).pipe<ICatalogBrand[]>(tap((response: any) => {
             return response;
@@ -51,4 +70,10 @@ export class CatalogService {
             return response;
         }));
     };
+
+    getProduct(id: number): Observable<ICatalogItem>{
+        return this.service.get(this.catalogUrl+"/"+id).pipe<ICatalogItem>(tap((response: any) =>{
+            return response;
+        }))
+    }
 }
