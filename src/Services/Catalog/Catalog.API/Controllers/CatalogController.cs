@@ -153,6 +153,7 @@ public class CatalogController : ControllerBase
         
         var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
         var fetchItems = root
+            .Select(item => new CatalogItem(){ Id = item.Id, Name = ' ' + item.Name.ToLowerInvariant() + ' ' + item.Description.ToLowerInvariant() + ' ' })
             .ToListAsync();
 
         Dictionary<(char, char), int> bigrams = new Dictionary<(char, char), int>();
@@ -167,7 +168,7 @@ public class CatalogController : ControllerBase
 
         var itemsOnPage = (await fetchItems)
             .Where(ci => {
-                var searchString = ' ' + ci.Name.ToLowerInvariant() + ' ' + ci.Description.ToLowerInvariant() + ' ';
+                var searchString = ci.Name;
                 for (var i = searchString.Length - 2; i >= 0; i--)
                 {
                     if (bigrams.TryGetValue((searchString[i], searchString[i + 1]), out var x))
@@ -180,11 +181,14 @@ public class CatalogController : ControllerBase
             .OrderByDescending(ci => ci.Score)
             .Skip(pageSize * pageIndex)
             .Take(pageSize)
-            .ToList();
+            .Select(ci => ci.Id);
+        
 
-        itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
+        var items = itemsOnPage.Select(ci => root.First(x => x.Id == ci)).ToList();
 
-        return new PaginatedItemsViewModel<CatalogItem>(pageIndex, pageSize, itemsOnPage.LongCount(), itemsOnPage);
+        items = ChangeUriPlaceholder(items);
+
+        return new PaginatedItemsViewModel<CatalogItem>(pageIndex, pageSize, itemsOnPage.LongCount(), items);
     }
 
     // GET api/v1/[controller]/items/type/all/brand[?pageSize=3&pageIndex=10]
@@ -281,7 +285,8 @@ public class CatalogController : ControllerBase
             Description = product.Description,
             Name = product.Name,
             PictureFileName = product.PictureFileName,
-            Price = product.Price
+            Price = product.Price,
+            PictureEncoded = product.PictureEncoded
         };
 
         _catalogContext.CatalogItems.Add(item);
