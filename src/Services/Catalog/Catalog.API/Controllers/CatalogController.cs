@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
+﻿using Azure.Messaging.EventHubs.Consumer;
+
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
@@ -75,6 +77,7 @@ public class CatalogController : ControllerBase
 
     [HttpGet]
     [Route("items/{id:int}")]
+    [ActionName(nameof(ItemByIdAsync))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<CatalogItem>> ItemByIdAsync(int id)
@@ -154,11 +157,11 @@ public class CatalogController : ControllerBase
         
         var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
         var fetchItems = root
-            .Select(item => new CatalogItem(){ Id = item.Id, Name = ' ' + item.Name.ToLowerInvariant() })
+            .Select(item => new CatalogItem(){ Id = item.Id, Name = ' ' + item.Name.ToLowerInvariant() + ' ' })
             .ToListAsync();
 
         Dictionary<(char, char), int> bigrams = new Dictionary<(char, char), int>();
-        var searchString = (' ' + searchText.ToLowerInvariant().Trim());
+        var searchString = (' ' + searchText.ToLowerInvariant().Trim() + ' ');
         for (var i = searchString.Length - 2; i >= 0; i--)
         {
             if (!bigrams.TryAdd((searchString[i], searchString[i + 1]), 1))
@@ -167,39 +170,48 @@ public class CatalogController : ControllerBase
             }
         }
 
-        var itemsOnPage = (await fetchItems)
+        var items = (await fetchItems)
             .Where(ci => {
                 ci.Name = multispaceRegex.Replace(ci.Name, " ");
-                var searchString = ci.Name;
-                var wordScore = 1;
-                for (var i = searchString.Length - 2; i >= 0; i--)
+                string searchString = ci.Name;
+                double wordScore = 0;
+                int wordLength = 0;
+                int currGram = 0;
+                for (int i = searchString.Length - 2; i >= 0; i--)
                 {
+                    wordLength++;
+                    if (bigrams.TryGetValue((searchString[i], searchString[i + 1]), out currGram))
+                    {
+                        currGram = 1 + currGram;
+                    }
+                    else
+                    {
+                        currGram = 1;
+                    }
+                    wordScore += currGram;
+
                     if (searchString[i] == ' ')
                     {
+                        if (wordLength > 0)
+                        {
+                            wordScore /= wordLength;
+                            wordLength = 0;
+                        }
                         ci.Score += wordScore;
-                        wordScore = 1;
-                        i--;
-                        continue;
+                        wordScore = 0;
                     }
-                    if (bigrams.TryGetValue((searchString[i], searchString[i + 1]), out var x))
-                    {
-                        wordScore *= (1 + x);
-                    }
-                    
                 }
-                return ci.Score > ci.Name.Count(c => c == ' ');
+                ci.Score /= ci.Name.Count(x => x == ' ');
+                return ci.Score > 1;
             })
             .OrderByDescending(ci => ci.Score)
             .Skip(pageSize * pageIndex)
             .Take(pageSize)
-            .Select(ci => ci.Id);
-        
-
-        var items = itemsOnPage.Select(ci => root.First(x => x.Id == ci)).ToList();
+            .ToList();
 
         items = ChangeUriPlaceholder(items);
 
-        return new PaginatedItemsViewModel<CatalogItem>(pageIndex, pageSize, itemsOnPage.LongCount(), items);
+        return new PaginatedItemsViewModel<CatalogItem>(pageIndex, pageSize, items.LongCount(), items);
     }
 
     // GET api/v1/[controller]/items/type/all/brand[?pageSize=3&pageIndex=10]
@@ -243,9 +255,9 @@ public class CatalogController : ControllerBase
         return await _catalogContext.CatalogBrands.ToListAsync();
     }
 
-    //PUT api/v1/[controller]/items
+    //POST api/v1/[controller]/items
     [Route("items")]
-    [HttpPut]
+    [HttpPost]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult> UpdateProductAsync([FromBody] CatalogItem productToUpdate)
@@ -283,21 +295,25 @@ public class CatalogController : ControllerBase
         return CreatedAtAction(nameof(ItemByIdAsync), new { id = productToUpdate.Id }, null);
     }
 
-    //POST api/v1/[controller]/items
+    //PUT api/v1/[controller]/items
     [Route("items")]
-    [HttpPost]
+    [HttpPut]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult> CreateProductAsync([FromBody] CatalogItem product)
     {
         var item = new CatalogItem
         {
-            CatalogBrandId = product.CatalogBrandId,
-            CatalogTypeId = product.CatalogTypeId,
+            CatalogBrandId = 1,
+            CatalogTypeId = 1,
             Description = product.Description,
             Name = product.Name,
-            PictureFileName = product.PictureFileName,
+            PictureFileName = "1.jpg",
             Price = product.Price,
-            PictureEncoded = product.PictureEncoded
+            PictureEncoded = product.PictureEncoded,
+            AvailableStock = product.AvailableStock,
+            RestockThreshold = product.RestockThreshold,
+            MaxStockThreshold = product.MaxStockThreshold,
+            OnReorder = true,
         };
 
         _catalogContext.CatalogItems.Add(item);
