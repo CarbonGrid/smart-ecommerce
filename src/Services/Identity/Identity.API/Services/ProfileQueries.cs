@@ -16,12 +16,10 @@
             var result = await connection.QueryAsync<dynamic>(
             @"UPDATE AspNetUsers
                 SET Street = @street, City = @city, State = @state, Country = @country, CardNumber = @cardNo, CardHolderName = @cardHolderName, Expiration = @expiration, SecurityNumber = @sercurityNo
-                where USER_ID = @id"
+                where ID = @id
+                SELECT * FROM AspNetUsers where ID = @id"
                 , new { id = user.Id, street = user.Street, city = user.City, state = user.State, country = user.Country, cardNo = user.CardNumber, cardHolderName = user.CardHolderName, expiration = user.Expiration, sercurityNo = user.SecurityNumber }
             );
-
-            if (result.AsList().Count == 0)
-                throw new KeyNotFoundException();
 
             return MapApplicationUsers(result);
         }
@@ -30,15 +28,15 @@
         {
             var user = new ApplicationUser
             {
-                CardNumber = result[0].cardnumber,
-                CardHolderName = result[0].cardholdername,
-                Expiration = result[0].expiration,
-                State = result[0].state,
-                Street = result[0].street,
-                City = result[0].city,
-                ZipCode = result[0].zipcode,
-                Country = result[0].country,
-                SecurityNumber = result[0].securitynumber
+                CardNumber = result[0].CardNumber,
+                CardHolderName = result[0].CardHolderName,
+                Expiration = result[0].Expiration,
+                State = result[0].State,
+                Street = result[0].Street,
+                City = result[0].City,
+                ZipCode = result[0].ZipCode,
+                Country = result[0].Country,
+                SecurityNumber = result[0].SercurityNumber
             };
             return user;
         }

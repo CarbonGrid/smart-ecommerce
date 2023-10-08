@@ -39,7 +39,7 @@ builder.Services.AddTransient<ILoginService<ApplicationUser>, EFLoginService>();
 builder.Services.AddTransient<IRedirectService, RedirectService>();
 
 var services = builder.Services;
-services.AddScoped<IProfileQueries>(sp => new ProfileQueries(builder.Configuration.GetConnectionString("OrderingDB")));
+services.AddScoped<IProfileQueries>(sp => new ProfileQueries(builder.Configuration.GetConnectionString("IdentityDB")));
 
 var app = builder.Build();
 
