@@ -175,6 +175,8 @@ public class CatalogController : ControllerBase
                 ci.Name = multispaceRegex.Replace(ci.Name, " ");
                 string searchString = ci.Name;
                 double wordScore = 0;
+                double maxWordScore = 0;
+                int relevantWordCount = 0;
                 int wordLength = 0;
                 int currGram = 0;
                 for (int i = searchString.Length - 2; i >= 0; i--)
@@ -197,11 +199,21 @@ public class CatalogController : ControllerBase
                             wordScore /= wordLength;
                             wordLength = 0;
                         }
-                        ci.Score += wordScore;
+                        if (wordScore > 1)
+                        {
+                            relevantWordCount++;
+                            ci.Score += wordScore;
+                            maxWordScore = Math.Max(maxWordScore, wordScore);
+                        }
                         wordScore = 0;
                     }
                 }
-                ci.Score /= ci.Name.Count(x => x == ' ');
+                if (relevantWordCount == 0)
+                {
+                    return false;
+                }
+                ci.Score /= relevantWordCount;
+                ci.Score *= maxWordScore;
                 return ci.Score > 1;
             })
             .OrderByDescending(ci => ci.Score)
