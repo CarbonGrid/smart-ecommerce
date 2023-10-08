@@ -311,8 +311,8 @@ public class CatalogController : ControllerBase
             Price = product.Price,
             PictureEncoded = product.PictureEncoded,
             AvailableStock = product.AvailableStock,
-            RestockThreshold = product.RestockThreshold,
-            MaxStockThreshold = product.MaxStockThreshold,
+            RestockThreshold = 10000,
+            MaxStockThreshold = 10000,
             OnReorder = true,
         };
 
