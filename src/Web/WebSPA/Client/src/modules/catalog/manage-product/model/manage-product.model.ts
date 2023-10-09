@@ -1,6 +1,7 @@
 export interface Product {
-    title: string;
+    name: string;
     description: string;
     price: number;
-    imageBase64: string;
+    pictureEncoded: string;
+    availableStock: number;
 }
