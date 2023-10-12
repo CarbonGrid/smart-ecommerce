@@ -25,15 +25,17 @@
         background: $color-brightest;
         height: 0;
         min-width: 10rem;
-        overflow: visible;
-        position: relative;
+        overflow: hidden;
+        position: absolute;
         right: 0;
         top: 2.5rem;
         transition: all 0.25s ease;
     }
 
     &:hover &-drop {
-        height: 5rem;
+        visibility: visible;
+        z-index: 9;
+        height: 7.5rem;
     }
 
     &-item {
@@ -50,3 +52,4 @@
         }
     }
 }
+

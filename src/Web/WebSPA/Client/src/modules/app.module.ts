@@ -12,6 +12,7 @@ import { OrdersModule } from './orders/orders.module';
 import { BasketModule } from './basket/basket.module';
 import { ToastrModule } from 'ngx-toastr';
 import { FilterPipe } from './shared/pipes/FilterPipe';
+import { UserModule } from './user/user.module';
 
 @NgModule({
     declarations: [
@@ -27,7 +28,9 @@ import { FilterPipe } from './shared/pipes/FilterPipe';
         SharedModule.forRoot(),
         CatalogModule,
         OrdersModule,
-        BasketModule
+        BasketModule,
+        UserModule
+        
     ],
     providers: [
         AppService

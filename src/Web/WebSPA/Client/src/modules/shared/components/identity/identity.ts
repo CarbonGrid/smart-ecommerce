@@ -14,6 +14,7 @@ export class Identity implements OnInit  {
     authenticated: boolean = false;
     private subscription: Subscription;
     private userName: string = '';
+    private id:string = '';
 
     constructor(private service: SecurityService, private signalrService: SignalrService) {
 

@@ -1,0 +1,97 @@
+<div class="container-xl px-4 mt-4">
+    <hr class="mt-0 mb-4">
+        <div class="col-xl-10">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form [formGroup]="userForm" (ngSubmit)="submitForm(userForm.value)">
+                        <div class="card-header">
+                            Account Details
+                        </div>
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputUsername">Username</label>
+                            <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" value = {{username}} disabled>
+                        </div>
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="name">First name</label>
+                                <input class="form-control" id="name" type="text" formControlName="name" [disabled]="true" 
+                                placeholder="Enter your First Name" value={{userDetails.name}} [formControl]="userForm.controls['name']">
+                            </div>
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="lastname">Last name</label>
+                                <input class="form-control" id="lastname" type="text" formControlName="lastname" 
+                                [disabled]="true" placeholder="Enter your Last Name" value={{userDetails.lastname}} [formControl]="userForm.controls['lastname']">
+                            </div>
+                        </div>
+                        <!-- Form Row        -->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (organization name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="country">Country</label>
+                                <input class="form-control" id="country" type="text" formControlName="country" 
+                                placeholder="Enter your current country" value={{userDetails.country}} [formControl]="userForm.controls['country']">
+                            </div>
+                            <!-- Form Group (location)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="zipcode">Zipcode</label>
+                                <input class="form-control" id="zipcode" type="text" formControlName="zipcode" 
+                                placeholder="Enter your zipcode" value={{userDetails.zipcode}} [formControl]="userForm.controls['zipcode']">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="small mb-1" for="street">Street</label>
+                            <input class="form-control" id="street" formControlName="street" 
+                            placeholder="Enter your street" value={{userDetails.street}} [formControl]="userForm.controls['street']">
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (phone number)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputUnit">Unit No</label>
+                                <input class="form-control" id="inputUnit" type="tel" placeholder="Leave blank if not applicable">
+                            </div>
+                            <!-- Form Group (birthday)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="state">State</label>
+                                <input class="form-control" id="state" type="text" formControlName="state" 
+                                placeholder="Enter your state" value={{userDetails.state}} [formControl]="userForm.controls['state']">
+                            </div>
+                        </div>
+                        <div class="card-header">
+                            Card Details
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="cardholdername">CardHolder Name</label>
+                                <input class="form-control" id="cardholdername" type="text" formControlName="cardholdername" 
+                                placeholder="Enter your card Name" value={{userDetails.cardholdername}} [formControl]="userForm.controls['cardholdername']">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="cardnumber">Card Number</label>
+                                <input class="form-control" id="cardnumber" type="text" formControlName="cardnumber" 
+                                placeholder="Enter your card number" value={{userDetails.cardnumber}} [formControl]="userForm.controls['cardnumber']">
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="cardsecuritynumber">CVV</label>
+                                <input class="form-control" id="cardsecuritynumber" type="text" formControlName="cardsecuritynumber" 
+                                placeholder="Enter your CVV" value={{userDetails.cardsecuritynumber}} [formControl]="userForm.controls['cardsecuritynumber']">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="cardexpiration">Card Expiry</label>
+                                <input class="form-control" id="cardexpiration" type="text" formControlName="cardexpiration" 
+                                placeholder="Enter your Card Expiry" value={{userDetails.cardexpiration}} [formControl]="userForm.controls['cardexpiration']">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Save changes</button>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+</div>
