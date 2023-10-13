@@ -6,6 +6,7 @@ import { map,catchError, tap } from 'rxjs/operators';
 
 import { SecurityService } from './security.service';
 import { Guid } from '../../../guid';
+import { IUserDetails } from '../models/userdetails.model';
 
 
 // Implementing a Retry-Circuit breaker policy 

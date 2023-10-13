@@ -6,9 +6,10 @@ import { CatalogComponent }     from './catalog.component';
 import { CatalogService }       from './catalog.service';
 import { Pager }                from '../shared/components/pager/pager';
 import { ManageProductComponent } from './manage-product/manage-product.component';
-
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+ 
 @NgModule({
-    imports: [BrowserModule, SharedModule, CommonModule],
+    imports: [BrowserModule, NgbModule, SharedModule, CommonModule],
     declarations: [CatalogComponent, ManageProductComponent],
     providers: [CatalogService]
 })

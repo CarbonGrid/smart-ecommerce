@@ -12,6 +12,8 @@ import { IPager }               from '../shared/models/pager.model';
 import { BasketWrapperService}  from '../shared/services/basket.wrapper.service';
 import { SecurityService }      from '../shared/services/security.service';
 import { ICarouselImage } from 'modules/shared/models/carouselImage';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { ViewProduct } from './view-product/view-product.component';
 
 @Component({
     selector: 'esh-catalog .esh-catalog .mb-5',
@@ -52,7 +54,8 @@ export class CatalogComponent implements OnInit {
       ];
 
 
-    constructor(private service: CatalogService, private basketService: BasketWrapperService, private configurationService: ConfigurationService, private securityService: SecurityService){
+    constructor(private service: CatalogService, private basketService: BasketWrapperService, private configurationService: ConfigurationService, 
+        private securityService: SecurityService, private modalService:NgbModal){
         this.authenticated = securityService.IsAuthorized;
     }
 
@@ -156,6 +159,14 @@ export class CatalogComponent implements OnInit {
                 };
         });
 
+    }
+
+    open(item:ICatalogItem){
+        const modal = this.modalService.open(ViewProduct,{ size: 'md', backdrop: 'static' });
+        modal.componentInstance.fromParent = item;
+        modal.result.then((result) =>{
+            console.log(result);
+        })
     }
 
     getTypes() {

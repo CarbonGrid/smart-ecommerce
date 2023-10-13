@@ -4,7 +4,7 @@
             <!-- Account details card-->
             <div class="card mb-4">
                 <div class="card-body">
-                    <form [formGroup]="userForm" (ngSubmit)="submitForm(userForm.value)">
+                    <form [formGroup]="userForm" (ngSubmit)="submitForm()">
                         <div class="card-header">
                             Account Details
                         </div>
@@ -24,7 +24,7 @@
                             <div class="col-md-6">
                                 <label class="small mb-1" for="lastname">Last name</label>
                                 <input class="form-control" id="lastname" type="text" formControlName="lastname" 
-                                [disabled]="true" placeholder="Enter your Last Name" value={{userDetails.lastname}} [formControl]="userForm.controls['lastname']">
+                                [disabled]="true" placeholder="Enter your Last Name" value={{userDetails.lastName}} [formControl]="userForm.controls['lastname']">
                             </div>
                         </div>
                         <!-- Form Row        -->
@@ -39,7 +39,7 @@
                             <div class="col-md-6">
                                 <label class="small mb-1" for="zipcode">Zipcode</label>
                                 <input class="form-control" id="zipcode" type="text" formControlName="zipcode" 
-                                placeholder="Enter your zipcode" value={{userDetails.zipcode}} [formControl]="userForm.controls['zipcode']">
+                                placeholder="Enter your zipcode" value={{userDetails.zipCode}} [formControl]="userForm.controls['zipcode']">
                             </div>
                         </div>
                         <div class="mb-3">
@@ -67,24 +67,24 @@
                             <div class="col-md-6">
                                 <label class="small mb-1" for="cardholdername">CardHolder Name</label>
                                 <input class="form-control" id="cardholdername" type="text" formControlName="cardholdername" 
-                                placeholder="Enter your card Name" value={{userDetails.cardholdername}} [formControl]="userForm.controls['cardholdername']">
+                                placeholder="Enter your card Name" value={{userDetails.cardHolderName}} [formControl]="userForm.controls['cardholdername']">
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="cardnumber">Card Number</label>
                                 <input class="form-control" id="cardnumber" type="text" formControlName="cardnumber" 
-                                placeholder="Enter your card number" value={{userDetails.cardnumber}} [formControl]="userForm.controls['cardnumber']">
+                                placeholder="Enter your card number" value={{userDetails.cardNumber}} [formControl]="userForm.controls['cardnumber']">
                             </div>
                         </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="cardsecuritynumber">CVV</label>
                                 <input class="form-control" id="cardsecuritynumber" type="text" formControlName="cardsecuritynumber" 
-                                placeholder="Enter your CVV" value={{userDetails.cardsecuritynumber}} [formControl]="userForm.controls['cardsecuritynumber']">
+                                placeholder="Enter your CVV" value={{userDetails.securityNumber}} [formControl]="userForm.controls['cardsecuritynumber']">
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="cardexpiration">Card Expiry</label>
                                 <input class="form-control" id="cardexpiration" type="text" formControlName="cardexpiration" 
-                                placeholder="Enter your Card Expiry" value={{userDetails.cardexpiration}} [formControl]="userForm.controls['cardexpiration']">
+                                placeholder="Enter your Card Expiry" value={{userDetails.expiration}} [formControl]="userForm.controls['cardexpiration']">
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Save changes</button>

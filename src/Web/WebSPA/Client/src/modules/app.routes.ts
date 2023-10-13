@@ -15,8 +15,8 @@ export const routes: Routes = [
     { path: 'orders', component: OrdersComponent },
     { path: 'orders/:id', component: OrdersDetailComponent },
     { path: 'order', component: OrdersNewComponent },
-    { path: 'edit', component: EditUserComponent}
-    { path: 'manage-product', component: ManageProductComponent },
+    { path: 'edit', component: EditUserComponent},
+    { path: 'manage-product', component: ManageProductComponent }
 ];
 
 export const routing = RouterModule.forRoot(routes, { });
