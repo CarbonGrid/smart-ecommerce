@@ -41,6 +41,11 @@ export class SecurityService {
         return this.storage.retrieve('authorizationData');
     }
 
+    // public getUniqueUserName(): string{
+    //     this.storage.retrieve('authorizationData');
+    //     return 
+    // }
+
     public ResetAuthorizationData() {
         this.storage.store('authorizationData', '');
         this.storage.store('authorizationDataIdToken', '');

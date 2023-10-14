@@ -19,6 +19,7 @@
     <Content Include="Setup\**\*;">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <None Remove="Pics\1.jpg" />
     <None Include="IntegrationEvents\EventHandling\AnyFutureIntegrationEventHandler.cs.txt" />
   </ItemGroup>
 

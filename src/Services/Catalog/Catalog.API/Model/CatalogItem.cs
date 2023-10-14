@@ -11,13 +11,15 @@ public class CatalogItem
     public string Description { get; set; }
 
     [NotMapped]
-    public int Score { get; set; }
+    public double Score { get; set; }
 
     public decimal Price { get; set; }
 
     public string PictureFileName { get; set; }
 
     public string PictureUri { get; set; }
+
+    public string PictureEncoded { get; set; }
 
     public int CatalogTypeId { get; set; }
 

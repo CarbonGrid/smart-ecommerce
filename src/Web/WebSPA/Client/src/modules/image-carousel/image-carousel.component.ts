@@ -9,33 +9,32 @@ import { ICarouselImage } from 'modules/shared/models/carouselImage';
 
 export class ImageCarouselComponent implements OnInit{
     @Input() images: ICarouselImage [] = [];
-    @Input() activeImageIndex = 0;
-    @Input() lastIndexPosition!: number;
-    @Input() config = {
-      height: 100,
-      width: 100,
-    }
+    currentIndex = 0;
    
     constructor(){}
     ngOnInit():void{
-        this.lastIndexPosition = this.images.length -1;
-    }
 
-    onNext(){
-        if(this.activeImageIndex >= this.lastIndexPosition){
-            this.activeImageIndex = 0;
-        }
-        else{
-            this.activeImageIndex +=1;
-        }
     }
+    goToPrevious(): void {
+        const isFirstSlide = this.currentIndex === 0;
+        const newIndex = isFirstSlide
+          ? this.images.length - 1
+          : this.currentIndex - 1;
+      
+        this.currentIndex = newIndex;
+      }
+      
+      goToNext(): void {
+        const isLastSlide = this.currentIndex === this.images.length - 1;
+        const newIndex = isLastSlide ? 0 : this.currentIndex + 1;
+      
+        this.currentIndex = newIndex;
+      }
 
-    onPrevious(){
-        if(this.activeImageIndex == 0){
-            this.activeImageIndex = this.lastIndexPosition;
-        }
-        else{
-            this.activeImageIndex -=1;
-        }
+    getCurrentSlideUrl() {
+        return `url('${this.images[this.currentIndex].src}')`;
+      }
+    goToSlide(slideIndex: number): void {
+        this.currentIndex = slideIndex;
     }
 }

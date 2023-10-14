@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
+﻿using Azure.Messaging.EventHubs.Consumer;
+
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
@@ -7,6 +9,7 @@ public class CatalogController : ControllerBase
     private readonly CatalogContext _catalogContext;
     private readonly CatalogSettings _settings;
     private readonly ICatalogIntegrationEventService _catalogIntegrationEventService;
+    private Regex multispaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
 
     public CatalogController(CatalogContext context, IOptionsSnapshot<CatalogSettings> settings, ICatalogIntegrationEventService catalogIntegrationEventService)
     {
@@ -74,6 +77,7 @@ public class CatalogController : ControllerBase
 
     [HttpGet]
     [Route("items/{id:int}")]
+    [ActionName(nameof(ItemByIdAsync))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<CatalogItem>> ItemByIdAsync(int id)
@@ -148,15 +152,16 @@ public class CatalogController : ControllerBase
     // GET api/v1/[controller]/items/search/searchText[?pageSize=3&pageIndex=10]
     [HttpGet]
     [Route("items/search/{searchText}")]
-    public async Task<ActionResult<PaginatedItemsViewModel<CatalogItem>>> ItemsBySearchTextAsync(string searchText, [FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
+    public async Task<ActionResult<PaginatedItemsViewModel<CatalogItem>>> ItemsBySearchTextAsync(string searchText = "", [FromQuery] int pageSize = 10, [FromQuery] int pageIndex = 0)
     {
         
         var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
         var fetchItems = root
+            .Select(item => new CatalogItem(){ Id = item.Id, Name = ' ' + item.Name.ToLowerInvariant() + ' ' })
             .ToListAsync();
 
         Dictionary<(char, char), int> bigrams = new Dictionary<(char, char), int>();
-        var searchString = (' ' + searchText.ToLowerInvariant() + ' ');
+        var searchString = (' ' + searchText.ToLowerInvariant().Trim() + ' ');
         for (var i = searchString.Length - 2; i >= 0; i--)
         {
             if (!bigrams.TryAdd((searchString[i], searchString[i + 1]), 1))
@@ -165,26 +170,60 @@ public class CatalogController : ControllerBase
             }
         }
 
-        var itemsOnPage = (await fetchItems)
+        var items = (await fetchItems)
             .Where(ci => {
-                var searchString = ' ' + ci.Name.ToLowerInvariant() + ' ' + ci.Description.ToLowerInvariant() + ' ';
-                for (var i = searchString.Length - 2; i >= 0; i--)
+                ci.Name = multispaceRegex.Replace(ci.Name, " ");
+                string searchString = ci.Name;
+                double wordScore = 0;
+                double maxWordScore = 0;
+                int relevantWordCount = 0;
+                int wordLength = 0;
+                int currGram = 0;
+                for (int i = searchString.Length - 2; i >= 0; i--)
                 {
-                    if (bigrams.TryGetValue((searchString[i], searchString[i + 1]), out var x))
+                    wordLength++;
+                    if (bigrams.TryGetValue((searchString[i], searchString[i + 1]), out currGram))
                     {
-                        ci.Score += x;
+                        currGram = 1 + currGram;
+                    }
+                    else
+                    {
+                        currGram = 1;
+                    }
+                    wordScore += currGram;
+
+                    if (searchString[i] == ' ')
+                    {
+                        if (wordLength > 0)
+                        {
+                            wordScore /= wordLength;
+                            wordLength = 0;
+                        }
+                        if (wordScore > 1)
+                        {
+                            relevantWordCount++;
+                            ci.Score += wordScore;
+                            maxWordScore = Math.Max(maxWordScore, wordScore);
+                        }
+                        wordScore = 0;
                     }
                 }
-                return ci.Score > 0;
+                if (relevantWordCount == 0)
+                {
+                    return false;
+                }
+                ci.Score /= relevantWordCount;
+                ci.Score *= maxWordScore;
+                return ci.Score > 1;
             })
             .OrderByDescending(ci => ci.Score)
             .Skip(pageSize * pageIndex)
             .Take(pageSize)
             .ToList();
 
-        itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
+        items = ChangeUriPlaceholder(items);
 
-        return new PaginatedItemsViewModel<CatalogItem>(pageIndex, pageSize, itemsOnPage.LongCount(), itemsOnPage);
+        return new PaginatedItemsViewModel<CatalogItem>(pageIndex, pageSize, items.LongCount(), items);
     }
 
     // GET api/v1/[controller]/items/type/all/brand[?pageSize=3&pageIndex=10]
@@ -228,9 +267,9 @@ public class CatalogController : ControllerBase
         return await _catalogContext.CatalogBrands.ToListAsync();
     }
 
-    //PUT api/v1/[controller]/items
+    //POST api/v1/[controller]/items
     [Route("items")]
-    [HttpPut]
+    [HttpPost]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult> UpdateProductAsync([FromBody] CatalogItem productToUpdate)
@@ -268,20 +307,25 @@ public class CatalogController : ControllerBase
         return CreatedAtAction(nameof(ItemByIdAsync), new { id = productToUpdate.Id }, null);
     }
 
-    //POST api/v1/[controller]/items
+    //PUT api/v1/[controller]/items
     [Route("items")]
-    [HttpPost]
+    [HttpPut]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult> CreateProductAsync([FromBody] CatalogItem product)
     {
         var item = new CatalogItem
         {
-            CatalogBrandId = product.CatalogBrandId,
-            CatalogTypeId = product.CatalogTypeId,
+            CatalogBrandId = 1,
+            CatalogTypeId = 1,
             Description = product.Description,
             Name = product.Name,
-            PictureFileName = product.PictureFileName,
-            Price = product.Price
+            PictureFileName = "1.jpg",
+            Price = product.Price,
+            PictureEncoded = product.PictureEncoded,
+            AvailableStock = product.AvailableStock,
+            RestockThreshold = 10000,
+            MaxStockThreshold = 10000,
+            OnReorder = true,
         };
 
         _catalogContext.CatalogItems.Add(item);

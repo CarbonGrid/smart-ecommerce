@@ -24,53 +24,18 @@ export class AppComponent implements OnInit {
 
     parentImages: ICarouselImage[] = [
         {
-          src: 'https://zwkbcfekyorurkjubugn.supabase.co/storage/v1/object/public/bucks/watchy_faces/watchy1.png?t=2022-09-01T22%3A04%3A27.297Z',
+          src: '/assets/images/header.jpg',
           caption: 'Standard digital clock',
           alt: ''
         },
         {
-          src: 'https://zwkbcfekyorurkjubugn.supabase.co/storage/v1/object/public/bucks/watchy_faces/watchy2.png?t=2022-09-01T22%3A06%3A12.323Z',
+          src: '/assets/images/logo.svg',
           caption: 'Digital clock with date, weather, and steps',
           alt: ''
         },
         {
-          src: 'https://zwkbcfekyorurkjubugn.supabase.co/storage/v1/object/public/bucks/watchy_faces/watchy3.png',
+          src: '/assets/images/smart-ecommerce.jpg',
           caption: 'Pokemon themed watch face',
-          alt: '',
-        },
-        {
-          src: 'https://zwkbcfekyorurkjubugn.supabase.co/storage/v1/object/public/bucks/watchy_faces/watchy5.png',
-          caption: 'Tetris themed watch face',
-          alt: '',
-        },
-        {
-          src: 'https://zwkbcfekyorurkjubugn.supabase.co/storage/v1/object/public/bucks/watchy_faces/watchy6.png',
-          caption: 'Paint program themed watch face',
-          alt: '',
-        },
-        {
-          src: 'https://zwkbcfekyorurkjubugn.supabase.co/storage/v1/object/public/bucks/watchy_faces/watchy7.png',
-          caption: 'Sports watch themed face',
-          alt: '',
-        },
-        {
-          src: 'https://zwkbcfekyorurkjubugn.supabase.co/storage/v1/object/public/bucks/watchy_faces/watchy8.png',
-          caption: 'Binary watch face',
-          alt: '',
-        },
-        {
-          src: 'https://zwkbcfekyorurkjubugn.supabase.co/storage/v1/object/public/bucks/watchy_faces/watchy9.png',
-          caption: 'Fancy watch face',
-          alt: '',
-        },
-        {
-          src: 'https://zwkbcfekyorurkjubugn.supabase.co/storage/v1/object/public/bucks/watchy_faces/watchy12.jpg',
-          caption: 'Cat face watch face',
-          alt: '',
-        },
-        {
-          src: 'https://zwkbcfekyorurkjubugn.supabase.co/storage/v1/object/public/bucks/watchy_faces/watchy14.png',
-          caption: 'PowerShell themed watch face',
           alt: '',
         }
       ];
