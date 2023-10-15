@@ -1,7 +1,7 @@
 name: Deploy catalog-api
 
 on:
-  workflow_dispatch:
+  workflow_dispatch
 env:
   CHART: catalog-api
   NAMESPACE: eshop
