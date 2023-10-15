@@ -1,4 +1,4 @@
-name: ordering-backgroundtasks
+name: ordering-backgroundtasks-push
 
 on:
   workflow_dispatch:

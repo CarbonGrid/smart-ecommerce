@@ -1,4 +1,4 @@
-name: catalog-api
+name: catalog-api-push
 
 on:
   workflow_dispatch:

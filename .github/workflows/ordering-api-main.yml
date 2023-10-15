@@ -1,4 +1,4 @@
-name: ordering-api
+name: ordering-api-push
 
 on:
   workflow_dispatch:

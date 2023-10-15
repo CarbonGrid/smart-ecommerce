@@ -1,4 +1,4 @@
-name: webshoppingagg
+name: webshoppingagg-push
 
 on:
   workflow_dispatch:

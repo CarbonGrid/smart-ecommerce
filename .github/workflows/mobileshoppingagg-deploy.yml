@@ -1,16 +1,7 @@
 name: Deploy mobileshoppingagg
 
 on:
-  workflow_dispatch:
-  repository_dispatch:
-    types:
-    - deploy
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
-
+  workflow_dispatch
 env:
   CHART: mobileshoppingagg
   NAMESPACE: eshop
@@ -18,8 +9,6 @@ env:
 
 jobs:
   deploy-to-k8s:
-    #if: github.event.pull_request.merged == true
-    #if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     if: false
     runs-on: ubuntu-latest
 
