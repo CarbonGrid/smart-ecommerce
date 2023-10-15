@@ -14,7 +14,7 @@ import { SearchProductComponent } from './search-product/search-product.componen
  
 @NgModule({
     imports: [BrowserModule, NgbModule, SharedModule, CommonModule],
-    declarations: [CatalogComponent, ManageProductComponent, SearchProductComponent],
+    declarations: [CatalogComponent, ManageProductComponent, SearchProductComponent, EditProductComponent],
     providers: [CatalogService]
 })
 export class CatalogModule { }
