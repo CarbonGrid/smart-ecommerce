@@ -25,6 +25,7 @@ env:
   DOTNET_VERSION: 7.0.x
   PROJECT_PATH: Services/Ordering/Ordering.API
   TESTS_PATH: Services/Ordering/Ordering.UnitTests
+  BRANCH: main
 
 jobs:
 

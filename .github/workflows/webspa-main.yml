@@ -22,6 +22,7 @@ on:
 env:
   SERVICE: webspa
   IMAGE: webspa
+  BRANCH: main
 
 jobs:
 

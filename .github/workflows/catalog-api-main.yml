@@ -25,6 +25,7 @@ env:
   DOTNET_VERSION: 7.0.x
   PROJECT_PATH: Services/Catalog/Catalog.API
   TESTS_PATH: Services/Catalog/Catalog.UnitTests
+  BRANCH: main
 
 jobs:
 
