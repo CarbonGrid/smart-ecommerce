@@ -1,9 +1,15 @@
 name: Deploy basket-api
 
 on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+    - deploy
   pull_request:
     types:
       - closed
+    branches:
+      - main
 
 env:
   CHART: basket-api
@@ -12,8 +18,7 @@ env:
 
 jobs:
   deploy-to-k8s:
-    if: github.event.pull_request.merged == true
-    #if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     #if: false
     runs-on: ubuntu-latest
 
