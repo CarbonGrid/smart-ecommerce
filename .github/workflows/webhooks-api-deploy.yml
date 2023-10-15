@@ -1,10 +1,7 @@
 name: Deploy webhooks-api
 
 on:
-  pull_request:
-    types:
-      - closed
-
+  workflow_dispatch
 env:
   CHART: webhooks-api
   NAMESPACE: eshop
