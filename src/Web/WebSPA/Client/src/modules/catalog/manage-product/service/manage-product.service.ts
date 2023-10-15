@@ -13,9 +13,6 @@ export class ManageProductService {
   private productsSubject = new BehaviorSubject<Product[]>([]);
 
   private catalogUrl: string = '';
-  private brandUrl: string = '';
-  private typesUrl: string = '';
-  private productUrl: string = '';
 
   constructor(private http: HttpClient, private service: DataService, private configurationService: ConfigurationService) {
     this.configurationService.settingsLoaded$.subscribe(x => {
