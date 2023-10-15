@@ -20,6 +20,7 @@ on:
 env:
   SERVICE: mobileshoppingagg
   IMAGE: mobileshoppingagg
+  BRANCH: main
 
 jobs:
 

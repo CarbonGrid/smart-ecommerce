@@ -22,6 +22,7 @@ on:
 env:
   SERVICE: ordering-backgroundtasks
   IMAGE: ordering.backgroundtasks
+  BRANCH: main
 
 jobs:
 

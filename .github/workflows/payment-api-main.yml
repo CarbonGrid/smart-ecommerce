@@ -22,6 +22,7 @@ on:
 env:
   SERVICE: payment-api
   IMAGE: payment.api
+  BRANCH: main
 
 jobs:
 

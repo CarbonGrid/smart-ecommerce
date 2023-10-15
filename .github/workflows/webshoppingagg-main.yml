@@ -20,6 +20,7 @@ on:
 env:
   SERVICE: webshoppingagg
   IMAGE: webshoppingagg
+  BRANCH: main
 
 jobs:
 
