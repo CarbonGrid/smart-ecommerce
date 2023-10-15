@@ -12,16 +12,19 @@
          *ngIf="authenticated">
 
         <div class="esh-identity-name">{{userName}}</div>
-        <div class="u-cursor-pointer pt-2 pb-2" (click)="randomFunction()" [routerLink]="['/manage-product']"
-        *ngIf="name === 'Alice'">
-            <div class="esh-identity-name d-flex align-items-center"> Manage Product 
-            </div>
-        </div>
     </section>
 
     <section class="esh-identity-drop"
              *ngIf="authenticated">
 
+        <div class="esh-identity-item"
+            [routerLink]="['/manage-product']"
+            *ngIf="name === 'Alice'">
+            <div class="esh-identity-name"> 
+                Manage Product 
+                </div>
+        </div>
+        
         <div class="esh-identity-item"
             [routerLink]="['/edit']">
             <div class="esh-catalog-name">

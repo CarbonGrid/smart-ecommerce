@@ -11,6 +11,12 @@ import { EditProductComponent } from './edit-product/edit-product.component';
 @NgModule({
     imports: [BrowserModule, SharedModule, CommonModule],
     declarations: [CatalogComponent, ManageProductComponent, EditProductComponent],
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { SearchProductComponent } from './search-product/search-product.component';
+ 
+@NgModule({
+    imports: [BrowserModule, NgbModule, SharedModule, CommonModule],
+    declarations: [CatalogComponent, ManageProductComponent, SearchProductComponent],
     providers: [CatalogService]
 })
 export class CatalogModule { }

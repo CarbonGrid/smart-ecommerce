@@ -22,7 +22,7 @@ export class CatalogService {
             this.catalogUrl = this.configurationService.serverSettings.purchaseUrl + '/c/api/v1/catalog/items';
             this.brandUrl = this.configurationService.serverSettings.purchaseUrl + '/c/api/v1/catalog/catalogbrands';
             this.typesUrl = this.configurationService.serverSettings.purchaseUrl + '/c/api/v1/catalog/catalogtypes';
-            this.productUrl = this.configurationService.serverSettings.purchaseUrl + '/api/v1/Catalog/items';
+            this.productUrl = this.configurationService.serverSettings.purchaseUrl + 'c/api/v1/Catalog/items/search/';
         });
     }
 
@@ -55,6 +55,15 @@ export class CatalogService {
         return this.service.getRecommendedItems(url).pipe<string []>(tap((response:string[]) =>{
             return response;
         }))
+    }
+
+    getSearch(text:string):Observable<ICatalog>{
+        let url = this.catalogUrl;
+        url = url+'/search/'+text+'?pageSize=15&pageIndex=0';
+        return this.service.getSearchText(url).pipe<ICatalog>(tap((response:any) =>{
+            return response;
+        }))
+
     }
 
    
