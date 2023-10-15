@@ -1,4 +1,4 @@
-name: mobileshoppingagg
+name: mobileshoppingagg-push
 
 on:
   workflow_dispatch:
