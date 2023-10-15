@@ -1,4 +1,4 @@
-name: webspa
+name: webspa-push
 
 on:
   workflow_dispatch:
