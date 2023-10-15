@@ -1,16 +1,7 @@
 name: Deploy webhooks-api
 
 on:
-  workflow_dispatch:
-  repository_dispatch:
-    types:
-    - deploy
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
-
+  workflow_dispatch
 env:
   CHART: webhooks-api
   NAMESPACE: eshop
