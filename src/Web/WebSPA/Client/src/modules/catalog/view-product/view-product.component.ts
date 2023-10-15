@@ -9,7 +9,7 @@ import { IBasket } from 'modules/shared/models/basket.model';
 import { IBasketItem } from 'modules/shared/models/basketItem.model';
 
 @Component({
-    selector: 'esh-catalog .esh-catalog .mb-5',
+    selector: 'view-product-info',
     styleUrls: ['./view-product.component.scss'],
     templateUrl: './view-product.component.html'
 })
@@ -24,6 +24,8 @@ export class ViewProduct implements OnInit{
     itemCount: number = 0;
     itemCountBefore : number = 0;
     imageSrc: string = '';
+
+    
 
     constructor(private service:CatalogService, public activeModal:NgbActiveModal, private securityService:SecurityService, private basketWrapperService: BasketWrapperService,
         private basketService:BasketService){
@@ -54,7 +56,7 @@ export class ViewProduct implements OnInit{
         }
         //add remaining to cart
         console.log(count.value);
-        var x = count.value - this.itemCountBefore;
+        var x = count.value;
         for (let i = 0; i < x;i++){
             this.basketWrapperService.addItemToBasket(this.item);
         }

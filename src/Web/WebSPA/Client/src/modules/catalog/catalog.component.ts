@@ -162,7 +162,7 @@ export class CatalogComponent implements OnInit {
     }
 
     open(item:ICatalogItem){
-        const modal = this.modalService.open(ViewProduct,{ size: 'md', backdrop: 'static' });
+        const modal = this.modalService.open(ViewProduct,{ size: 'md', backdrop: 'static', centered:true });
         modal.componentInstance.fromParent = item;
         modal.result.then((result) =>{
             console.log(result);
