@@ -56,10 +56,10 @@ export class EditProductComponent implements OnInit {
     const reader = new FileReader();
 
     reader.onload = (e: any) => {
-      // this.product.pictureEncoded = e.target.result;
-
-      // Set the value of the form control with the data URI
+      // Update the productForm with the new value
       this.productForm.get('pictureEncoded').setValue(e.target.result);
+      // Update the product object with the new image data
+      this.product.pictureEncoded = e.target.result;
     };
 
     reader.readAsDataURL(file);
@@ -71,7 +71,6 @@ export class EditProductComponent implements OnInit {
       this.product.name = this.productForm.get('name').value;
       this.product.description = this.productForm.get('description').value;
       this.product.price = this.productForm.get('price').value;
-      this.product.pictureEncoded = this.productForm.get('pictureEncoded').value;
       this.product.availableStock = this.productForm.get('availableStock').value;
 
       // Only submit if the form is valid
@@ -89,4 +88,5 @@ export class EditProductComponent implements OnInit {
       );
     }
   }
+
 }
