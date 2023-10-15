@@ -1,6 +1,10 @@
 name: Deploy mobileshoppingagg
 
 on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+    - deploy
   pull_request:
     types:
       - closed
