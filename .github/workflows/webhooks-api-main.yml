@@ -1,4 +1,4 @@
-name: webhooks-api
+name: webhooks-api-push
 
 on:
   workflow_dispatch:
