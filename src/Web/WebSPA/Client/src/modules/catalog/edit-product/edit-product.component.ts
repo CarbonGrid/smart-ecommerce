@@ -23,15 +23,17 @@ export class EditProductComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.productId = this.route.snapshot.paramMap.get('id'); // Get the product ID from the route parameter
+    // Get the product ID from the route parameter
+    this.productId = this.route.snapshot.paramMap.get('id');
 
     // Retrieve the product details for the given product ID and populate the form
     this.productService.getProductById(this.productId).subscribe(
       (product) => {
+        console.log('Fetched product:', product);
         this.product = product;
 
-        // Initialize the form with existing product details
         this.productForm = this.formBuilder.group({
+          productId: [this.product.id],
           name: [this.product.name, Validators.required],
           description: [this.product.description, Validators.required],
           price: [this.product.price, [Validators.required, Validators.min(0)]],
@@ -39,8 +41,7 @@ export class EditProductComponent implements OnInit {
           availableStock: [
             this.product.availableStock,
             [Validators.required, Validators.min(0), Validators.max(10000)]
-          ],
-          productId: [this.product.id] // Populate product ID
+          ]
         });
       },
       (error) => {
@@ -55,14 +56,14 @@ export class EditProductComponent implements OnInit {
     const reader = new FileReader();
 
     reader.onload = (e: any) => {
-        // this.product.pictureEncoded = e.target.result;
+      // this.product.pictureEncoded = e.target.result;
 
-        // Set the value of the form control with the data URI
-        this.productForm.get('pictureEncoded').setValue(e.target.result);
+      // Set the value of the form control with the data URI
+      this.productForm.get('pictureEncoded').setValue(e.target.result);
     };
 
     reader.readAsDataURL(file);
-}
+  }
 
   onSubmit() {
     if (this.productForm.valid) {
