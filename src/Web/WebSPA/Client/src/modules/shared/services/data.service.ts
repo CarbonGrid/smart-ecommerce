@@ -45,6 +45,12 @@ export class DataService {
         return this.doPut(url, data, true, params);
     }
 
+    getSearchText(url:string):Observable<Response>{
+        return this.http.get(url).pipe(map((result:Response) =>{
+            return result;
+        }))
+    }
+
     private doPost(url: string, data: any, needId: boolean, params?: any): Observable<Response> {
         let options = { };
         this.setHeaders(options, needId);

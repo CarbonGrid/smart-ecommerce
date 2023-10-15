@@ -14,6 +14,7 @@ import { SecurityService }      from '../shared/services/security.service';
 import { ICarouselImage } from 'modules/shared/models/carouselImage';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ViewProduct } from './view-product/view-product.component';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'esh-catalog .esh-catalog .mb-5',
@@ -21,7 +22,7 @@ import { ViewProduct } from './view-product/view-product.component';
     templateUrl: './catalog.component.html'
 })
 export class CatalogComponent implements OnInit {
-    brands: ICatalogBrand[];5
+    brands: ICatalogBrand[];
     types: ICatalogType[];
     catalog: ICatalog;
     brandSelected: number;
@@ -30,7 +31,6 @@ export class CatalogComponent implements OnInit {
     authenticated: boolean = false;
     authSubscription: Subscription;
     errorReceived: boolean;
-    searchText: string;
     recommended: string[];
     filteredCatalogsItem: ICatalogItem[] = [];
     recommendedItems: ICatalogItem[] = [];
@@ -55,7 +55,7 @@ export class CatalogComponent implements OnInit {
 
 
     constructor(private service: CatalogService, private basketService: BasketWrapperService, private configurationService: ConfigurationService, 
-        private securityService: SecurityService, private modalService:NgbModal){
+        private securityService: SecurityService, private modalService:NgbModal, private router: Router){
         this.authenticated = securityService.IsAuthorized;
     }
 
@@ -131,17 +131,12 @@ export class CatalogComponent implements OnInit {
         return this.filteredCatalogsItem;
     }
 
-    onSearchChange(value : string){
-        console.log('Searching for.... ',value);
-        this.searchText = value;
-        this.search();
-    }
-
-    search(){
+    search(searchText){
         ("Initializing....")
-        this.filteredCatalogsItem = this.searchText === ""? this.recommendedItems : this.catalog.data.filter((element) => {
-            return element.name.toLowerCase().includes(this.searchText.toLowerCase());
-        })
+        console.log(searchText.value);
+        this.router.navigate(['search/',searchText.value],
+        {queryParams: {pageSize:15,
+                    pageIndex:0}});
     }
 
     getCatalog(pageSize: number, pageIndex: number, brand?: number, type?: number) {

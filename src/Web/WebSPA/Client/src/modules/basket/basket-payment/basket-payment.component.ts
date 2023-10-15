@@ -22,6 +22,7 @@ export class Payment implements OnInit{
     }
 
     ngOnInit(): void {
+        console.log(this.fromParent);
          this.totalPrice = this.fromParent;
        
     }
