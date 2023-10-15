@@ -22,6 +22,7 @@ on:
 env:
   SERVICE: identity-api
   IMAGE: identity.api
+  BRANCH: main
 
 jobs:
 

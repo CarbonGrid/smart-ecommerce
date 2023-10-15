@@ -22,6 +22,7 @@ on:
 env:
   SERVICE: webhooks-api
   IMAGE: webhooks.api
+  BRANCH: main
 
 jobs:
 

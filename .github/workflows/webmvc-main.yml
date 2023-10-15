@@ -23,6 +23,7 @@ on:
 env:
   SERVICE: webmvc
   IMAGE: webmvc
+  BRANCH: main
 
 jobs:
 

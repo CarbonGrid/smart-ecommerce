@@ -22,6 +22,7 @@ on:
 env:
   SERVICE: ordering-signalrhub
   IMAGE: ordering.signalrhub
+  BRANCH: main
 
 jobs:
 

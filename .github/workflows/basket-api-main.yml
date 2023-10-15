@@ -22,6 +22,7 @@ on:
 env:
   SERVICE: basket-api
   IMAGE: basket.api
+  BRANCH: main
 
 jobs:
 
