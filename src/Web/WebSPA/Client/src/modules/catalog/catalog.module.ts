@@ -7,12 +7,10 @@ import { CatalogService }       from './catalog.service';
 import { Pager }                from '../shared/components/pager/pager';
 import { ManageProductComponent } from './manage-product/manage-product.component';
 import { EditProductComponent } from './edit-product/edit-product.component';
-
-@NgModule({
-    imports: [BrowserModule, SharedModule, CommonModule],
-    declarations: [CatalogComponent, ManageProductComponent, EditProductComponent],
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { SearchProductComponent } from './search-product/search-product.component';
+
+
  
 @NgModule({
     imports: [BrowserModule, NgbModule, SharedModule, CommonModule],
