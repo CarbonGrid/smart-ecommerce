@@ -1,9 +1,15 @@
 name: Deploy ordering-signalrhub
 
 on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+    - deploy
   pull_request:
     types:
       - closed
+    branches:
+      - main
 
 env:
   CHART: ordering-signalrhub
