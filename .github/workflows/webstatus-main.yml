@@ -1,4 +1,4 @@
-name: webstatus
+name: webstatus-push
 
 on:
   workflow_dispatch:
