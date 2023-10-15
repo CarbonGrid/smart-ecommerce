@@ -1,4 +1,4 @@
-name: basket-api
+name: basket-api-push
 
 on:
   workflow_dispatch:
