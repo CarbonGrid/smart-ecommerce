@@ -156,9 +156,7 @@ public class CatalogController : ControllerBase
     {
         
         var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
-        var fetchItems = root
-            .Select(item => new CatalogItem(){ Id = item.Id, Name = ' ' + item.Name.ToLowerInvariant() + ' ' })
-            .ToListAsync();
+        var fetchItems = root.ToListAsync();
 
         Dictionary<(char, char), int> bigrams = new Dictionary<(char, char), int>();
         var searchString = (' ' + searchText.ToLowerInvariant().Trim() + ' ');
@@ -172,8 +170,7 @@ public class CatalogController : ControllerBase
 
         var items = (await fetchItems)
             .Where(ci => {
-                ci.Name = multispaceRegex.Replace(ci.Name, " ");
-                string searchString = ci.Name;
+                string searchString = multispaceRegex.Replace(' ' + ci.Name.ToLowerInvariant() + ' ', " ");
                 double wordScore = 0;
                 double maxWordScore = 0;
                 int relevantWordCount = 0;
