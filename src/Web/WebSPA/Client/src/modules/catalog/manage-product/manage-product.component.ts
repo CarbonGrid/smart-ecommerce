@@ -28,9 +28,6 @@ export class ManageProductComponent {
         const reader = new FileReader();
 
         reader.onload = (e: any) => {
-            // this.product.pictureEncoded = e.target.result;
-
-            // Set the value of the form control with the data URI
             this.productForm.get('pictureEncoded').setValue(e.target.result);
         };
 
